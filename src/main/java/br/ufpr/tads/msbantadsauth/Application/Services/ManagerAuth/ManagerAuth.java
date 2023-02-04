@@ -1,6 +1,8 @@
 package br.ufpr.tads.msbantadsauth.Application.Services.ManagerAuth;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,7 +39,7 @@ public class ManagerAuth implements IManagerAuth {
                     event.getEmail(),
                     event.getName(),
                     passwordEncrypted,
-                    new Date(),
+                    Calendar.getInstance(TimeZone.getTimeZone("America/Sao_Paulo")).getTime(),
                     false,
                     null);
 

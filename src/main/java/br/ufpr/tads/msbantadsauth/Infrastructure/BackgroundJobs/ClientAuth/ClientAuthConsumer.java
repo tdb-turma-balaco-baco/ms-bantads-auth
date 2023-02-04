@@ -7,18 +7,24 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 import br.ufpr.tads.msbantadsauth.Application.Services.ClientAuth.IClientAuth;
+import br.ufpr.tads.msbantadsauth.Application.Services.ClientAuth.Events.CreateClientAuthEvent;
 import br.ufpr.tads.msbantadsauth.Application.Services.ClientAuth.Events.GeneratePasswordEvent;
 
 @Component
-@RabbitListener(queues = {"${auth.queue.consumer}"})
-public class GenerateClientPasswordConsumer {
+@RabbitListener(queues = {"${auth.client.queue}"})
+public class ClientAuthConsumer {
     
     @Autowired
     IClientAuth _clientAuth;
     
     @RabbitHandler
-    public void receive(@Payload GeneratePasswordEvent event){
+    public void receiveGeneratePassword(@Payload GeneratePasswordEvent event){
         _clientAuth.generatePassword(event);
+    }
+
+    @RabbitHandler
+    public void receiveCreateClients(@Payload CreateClientAuthEvent event){
+        _clientAuth.createClientAuth(event);
     }
 
 }

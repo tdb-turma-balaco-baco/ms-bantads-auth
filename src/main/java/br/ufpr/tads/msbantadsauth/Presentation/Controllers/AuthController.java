@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.ufpr.tads.msbantadsauth.Application.Abstractions.Messaging.IMessageSender;
 import br.ufpr.tads.msbantadsauth.Application.Services.Authentication.IUserAuthentication;
 import br.ufpr.tads.msbantadsauth.Presentation.Contracts.UserLoginRequest;
 
@@ -19,6 +20,9 @@ public class AuthController {
 
     @Autowired
     IUserAuthentication _userAuthentication;
+
+    @Autowired
+    IMessageSender _message;
 
     @PostMapping("/login")
     public ResponseEntity<Boolean> login(@RequestBody UserLoginRequest user) {
