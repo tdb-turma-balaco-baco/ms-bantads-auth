@@ -1,7 +1,5 @@
 package br.ufpr.tads.msbantadsauth.Application.Services.ManagerAuth;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +11,7 @@ import br.ufpr.tads.msbantadsauth.Application.Services.ManagerAuth.Events.Create
 import br.ufpr.tads.msbantadsauth.Domain.Entities.User;
 import br.ufpr.tads.msbantadsauth.Domain.Events.ManagerAuth.ManagerAuthCreatedEvent;
 import br.ufpr.tads.msbantadsauth.Domain.Events.ManagerAuth.ManagerAuthFail;
+import br.ufpr.tads.msbantadsauth.Infrastructure.Persistence.UserRepository;
 
 @Service
 public class ManagerAuth implements IManagerAuth {
@@ -22,6 +21,9 @@ public class ManagerAuth implements IManagerAuth {
 
     @Autowired
     IMessageSender _messageSender;
+
+    @Autowired
+    UserRepository _userRepository;
     
     @Override
     public void createManagerAuth(CreateManagerAuthEvent event) {
@@ -30,18 +32,16 @@ public class ManagerAuth implements IManagerAuth {
             String createdPassword = _passwordManager.generatePassword();
             String passwordEncrypted = _passwordManager.encryptPassword(createdPassword);
 
-            Date creationDate = Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
-
             User authEntity = new User(
                     event.getCpf(),
                     event.getEmail(),
                     event.getName(),
                     passwordEncrypted,
-                    creationDate,
+                    new Date(),
                     false,
                     null);
 
-            // Save repo
+            _userRepository.save(authEntity);
 
             ManagerAuthCreatedEvent authCreatedEvent = new ManagerAuthCreatedEvent(
                 event.getCpf(),

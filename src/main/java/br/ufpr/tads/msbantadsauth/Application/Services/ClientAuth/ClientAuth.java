@@ -1,8 +1,6 @@
 package br.ufpr.tads.msbantadsauth.Application.Services.ClientAuth;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
+import java.util.Calendar;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,9 +11,9 @@ import br.ufpr.tads.msbantadsauth.Application.Services.ClientAuth.Events.CreateC
 import br.ufpr.tads.msbantadsauth.Application.Services.ClientAuth.Events.GeneratePasswordEvent;
 import br.ufpr.tads.msbantadsauth.Domain.Entities.User;
 import br.ufpr.tads.msbantadsauth.Domain.Events.ClientAuth.AuthCanceledEvent;
-import br.ufpr.tads.msbantadsauth.Domain.Events.ClientAuth.ClientAuthCreatedEvent;
 import br.ufpr.tads.msbantadsauth.Domain.Events.ClientAuth.ClientPasswordCreatedEvent;
 import br.ufpr.tads.msbantadsauth.Domain.Events.ClientAuth.ClientPasswordFailEvent;
+import br.ufpr.tads.msbantadsauth.Infrastructure.Persistence.UserRepository;
 
 @Service
 public class ClientAuth implements IClientAuth {
@@ -26,25 +24,24 @@ public class ClientAuth implements IClientAuth {
     @Autowired
     IMessageSender _messageSender;
 
+    @Autowired
+    UserRepository _userRepository;
+
     @Override
     public void createClientAuth(CreateClientAuthEvent event) {
 
         try {
-            Date creationDate = Date.from(LocalDate.now().atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
-
+            
             User authEntity = new User(
                     event.getCpf(),
                     event.getEmail(),
                     event.getName(),
                     "",
-                    creationDate,
+                    Calendar.getInstance().getTime(),
                     true,
                     null);
 
-            // Save repo
-
-            ClientAuthCreatedEvent authCreatedEvent = new ClientAuthCreatedEvent();
-            _messageSender.sendMessage(authCreatedEvent);
+            _userRepository.save(authEntity);
 
         } catch (Exception ex) {
 
@@ -60,18 +57,17 @@ public class ClientAuth implements IClientAuth {
     public void generatePassword(GeneratePasswordEvent event) {
 
         try {
-            // GET user by cpf
+            User user = _userRepository.findUserByCPF(event.getCpf());
 
-            String emailDoBanco = "";
-            // GeneratePassword
             String createdPassword = _passwordManager.generatePassword();
-
             String encryptedPassword = _passwordManager.encryptPassword(createdPassword);
-            // Update user
-            //set user Unblocked 
 
-            // create event
-            ClientPasswordCreatedEvent responseEvent = new ClientPasswordCreatedEvent(event.getCpf(), emailDoBanco,
+            user.setBlocked(false);
+            user.setPassword(encryptedPassword);
+
+            _userRepository.save(user);
+
+            ClientPasswordCreatedEvent responseEvent = new ClientPasswordCreatedEvent(event.getCpf(), user.getEmail(),
                     createdPassword);
 
             _messageSender.sendMessage(responseEvent);

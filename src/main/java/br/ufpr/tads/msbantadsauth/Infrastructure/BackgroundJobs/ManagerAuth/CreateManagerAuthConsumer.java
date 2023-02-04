@@ -14,7 +14,7 @@ public class CreateManagerAuthConsumer {
     @Autowired
     IManagerAuth _managerAuth;
     
-    @RabbitListener(queues = {"${auth.queue.consume}"})
+    @RabbitListener(queues = {"${auth.queue.consumer}"})
     public void receive(@Payload CreateManagerAuthEvent event){
         _managerAuth.createManagerAuth(event);
     }

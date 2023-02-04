@@ -14,7 +14,7 @@ public class CreateClientAuthConsumer {
     @Autowired
     IClientAuth _clientAuth;
     
-    @RabbitListener(queues = {"${auth.queue.consume}"})
+    @RabbitListener(queues = {"${auth.queue.consumer}"})
     public void receive(@Payload CreateClientAuthEvent event){
         _clientAuth.createClientAuth(event);
     }

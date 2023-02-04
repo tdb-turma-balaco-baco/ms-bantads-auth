@@ -4,23 +4,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.ufpr.tads.msbantadsauth.Application.Abstractions.Security.IPasswordManager;
+import br.ufpr.tads.msbantadsauth.Domain.Entities.User;
+import br.ufpr.tads.msbantadsauth.Infrastructure.Persistence.UserRepository;
 
 @Service
 public class UserAuthentication implements IUserAuthentication {
 
     @Autowired
     IPasswordManager _passwordManager;
+
+    @Autowired
+    UserRepository _userRepository;
     
     @Override
     public boolean login(String email, String password) {
 
-        String encryptedPassword = _passwordManager.encryptPassword(password);
+        User user = _userRepository.findUserByLogin(email);
+        if(user == null) return false;
 
-        //Try to verify if user exists in database with same email and password sent.
-        //and whether user isn't blocked.
-        boolean userExists = true; // chama funcao repository
-
-        return userExists;
+        boolean validLogin = _passwordManager.verifyPassword(password, user.getPassword());
+        return validLogin;
     }
     
 }
