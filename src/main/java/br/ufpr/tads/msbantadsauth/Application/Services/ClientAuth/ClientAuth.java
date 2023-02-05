@@ -11,6 +11,7 @@ import br.ufpr.tads.msbantadsauth.Application.Abstractions.Security.IPasswordMan
 import br.ufpr.tads.msbantadsauth.Application.Services.ClientAuth.Events.CreateClientAuthEvent;
 import br.ufpr.tads.msbantadsauth.Application.Services.ClientAuth.Events.GeneratePasswordEvent;
 import br.ufpr.tads.msbantadsauth.Domain.Entities.User;
+import br.ufpr.tads.msbantadsauth.Domain.Enums.UserType;
 import br.ufpr.tads.msbantadsauth.Domain.Events.ClientAuth.AuthCanceledEvent;
 import br.ufpr.tads.msbantadsauth.Domain.Events.ClientAuth.ClientPasswordCreatedEvent;
 import br.ufpr.tads.msbantadsauth.Domain.Events.ClientAuth.ClientPasswordFailEvent;
@@ -40,7 +41,7 @@ public class ClientAuth implements IClientAuth {
                     "",
                     Calendar.getInstance(TimeZone.getTimeZone("America/Sao_Paulo")).getTime(),
                     true,
-                    null);
+                    UserType.CLIENT);
 
             _userRepository.save(authEntity);
 

@@ -24,13 +24,29 @@ import br.ufpr.tads.msbantadsauth.Domain.Events.ManagerAuth.ManagerAuthCreatedEv
 import br.ufpr.tads.msbantadsauth.Domain.Events.ManagerAuth.ManagerAuthFail;
 
 @Configuration
-public class SenderConfig {
+public class RabbitConfig {
     @Value("${auth.queue.producer}")
-    private String message;
+    private String producerQueue;
+
+    @Value("${auth.client.queue}")
+    private String clientQueue;
+
+    @Value("${auth.manager.queue}")
+    private String managerQueue;
 
     @Bean
-    public Queue queue() {
-        return new Queue(message, true);
+    public Queue queueProducer() {
+        return new Queue(producerQueue, true);
+    }
+
+    @Bean
+    public Queue queueClient() {
+        return new Queue(clientQueue, true);
+    }
+
+    @Bean
+    public Queue queueManager() {
+        return new Queue(managerQueue, true);
     }
 
     @Bean

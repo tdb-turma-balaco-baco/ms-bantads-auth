@@ -1,7 +1,6 @@
 package br.ufpr.tads.msbantadsauth.Application.Services.ManagerAuth;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.TimeZone;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,7 @@ import br.ufpr.tads.msbantadsauth.Application.Abstractions.Messaging.IMessageSen
 import br.ufpr.tads.msbantadsauth.Application.Abstractions.Security.IPasswordManager;
 import br.ufpr.tads.msbantadsauth.Application.Services.ManagerAuth.Events.CreateManagerAuthEvent;
 import br.ufpr.tads.msbantadsauth.Domain.Entities.User;
+import br.ufpr.tads.msbantadsauth.Domain.Enums.UserType;
 import br.ufpr.tads.msbantadsauth.Domain.Events.ManagerAuth.ManagerAuthCreatedEvent;
 import br.ufpr.tads.msbantadsauth.Domain.Events.ManagerAuth.ManagerAuthFail;
 import br.ufpr.tads.msbantadsauth.Infrastructure.Persistence.UserRepository;
@@ -41,7 +41,7 @@ public class ManagerAuth implements IManagerAuth {
                     passwordEncrypted,
                     Calendar.getInstance(TimeZone.getTimeZone("America/Sao_Paulo")).getTime(),
                     false,
-                    null);
+                    UserType.MANAGER);
 
             _userRepository.save(authEntity);
 

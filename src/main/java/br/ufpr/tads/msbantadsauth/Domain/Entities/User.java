@@ -4,6 +4,10 @@ import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.data.mongodb.core.mapping.FieldType;
+
+import br.ufpr.tads.msbantadsauth.Domain.Enums.UserType;
 
 @Document("users")
 public class User {
@@ -15,16 +19,21 @@ public class User {
     private String password;
     private Date createdOn;
     private Boolean blocked;
+    @Field(targetType = FieldType.STRING)
+    private UserType type;
     private Date deletedOn;
 
-    public User(String cpf, String email, String name, String password, Date createdOn, boolean blocked, Date deletedOn) {
+    public User(String cpf, String email, String name, String password, Date createdOn, boolean blocked, UserType userType) {
         this.cpf = cpf;
         this.email = email;
         this.name = name;
         this.password = password;
         this.createdOn = createdOn;
         this.blocked = blocked;
-        this.deletedOn = deletedOn;
+        this.type = userType;
+    }
+    
+    public User() {
     }
 
     public Date getCreatedOn() {
@@ -69,6 +78,30 @@ public class User {
     }
     public void setDeletedOn(Date deletedOn) {
         this.deletedOn = deletedOn;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public UserType getType() {
+        return type;
+    }
+
+    public void setType(UserType type) {
+        this.type = type;
     }
 
     

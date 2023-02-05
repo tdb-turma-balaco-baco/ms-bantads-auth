@@ -15,10 +15,10 @@ public class MessageSender implements IMessageSender{
     private RabbitTemplate rabbitTemplate;
 
     @Autowired
-    private Queue queue;
+    private Queue queueProducer;
 
     @Override
     public void sendMessage(DomainEvent event) {
-        rabbitTemplate.convertAndSend(this.queue.getName(), event);
+        rabbitTemplate.convertAndSend(this.queueProducer.getName(), event);
     }
 }
