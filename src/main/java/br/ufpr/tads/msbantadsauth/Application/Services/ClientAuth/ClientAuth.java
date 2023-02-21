@@ -1,7 +1,6 @@
 package br.ufpr.tads.msbantadsauth.Application.Services.ClientAuth;
 
-import java.util.Calendar;
-import java.util.TimeZone;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,7 +38,7 @@ public class ClientAuth implements IClientAuth {
                     event.getEmail(),
                     event.getName(),
                     "",
-                    Calendar.getInstance(TimeZone.getTimeZone("America/Sao_Paulo")).getTime(),
+                    new Date(),
                     true,
                     UserType.CLIENT);
 
