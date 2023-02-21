@@ -12,4 +12,7 @@ public interface UserRepository extends MongoRepository<User, String>{
 
     @Query("{cpf:'?0'}")
     User findUserByCPF(String cpf);
+
+    @Query(value="{'cpf' : '?0', type:'MANAGER'}", delete = true)
+    void deleteManagerByCpf(String cpf);
 }

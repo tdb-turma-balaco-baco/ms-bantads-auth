@@ -9,10 +9,12 @@ import org.springframework.stereotype.Service;
 import br.ufpr.tads.msbantadsauth.Application.Abstractions.Messaging.IMessageSender;
 import br.ufpr.tads.msbantadsauth.Application.Abstractions.Security.IPasswordManager;
 import br.ufpr.tads.msbantadsauth.Application.Services.ManagerAuth.Events.CreateManagerAuthEvent;
+import br.ufpr.tads.msbantadsauth.Application.Services.ManagerAuth.Events.RemoveManagerAuthEvent;
 import br.ufpr.tads.msbantadsauth.Domain.Entities.User;
 import br.ufpr.tads.msbantadsauth.Domain.Enums.UserType;
 import br.ufpr.tads.msbantadsauth.Domain.Events.ManagerAuth.ManagerAuthCreatedEvent;
 import br.ufpr.tads.msbantadsauth.Domain.Events.ManagerAuth.ManagerAuthFail;
+import br.ufpr.tads.msbantadsauth.Domain.Events.ManagerAuth.RemovedManagerAccessEvent;
 import br.ufpr.tads.msbantadsauth.Infrastructure.Persistence.UserRepository;
 
 @Service
@@ -61,6 +63,14 @@ public class ManagerAuth implements IManagerAuth {
 
             _messageSender.sendMessage(managerCanceledEvent);
         }
+    }
+
+    @Override
+    public void removeManagerAuth(RemoveManagerAuthEvent event) {
+        _userRepository.deleteManagerByCpf(event.getCpf());
+
+        RemovedManagerAccessEvent eventDomain = new RemovedManagerAccessEvent(event.getCpf());
+        _messageSender.sendMessage(eventDomain);
     }
     
 }

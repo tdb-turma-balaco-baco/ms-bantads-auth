@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import br.ufpr.tads.msbantadsauth.Application.Services.ManagerAuth.IManagerAuth;
 import br.ufpr.tads.msbantadsauth.Application.Services.ManagerAuth.Events.CreateManagerAuthEvent;
+import br.ufpr.tads.msbantadsauth.Application.Services.ManagerAuth.Events.RemoveManagerAuthEvent;
 
 @Component
 public class CreateManagerAuthConsumer {
@@ -17,5 +18,10 @@ public class CreateManagerAuthConsumer {
     @RabbitListener(queues = {"${auth.manager.queue}"})
     public void receive(@Payload CreateManagerAuthEvent event){
         _managerAuth.createManagerAuth(event);
+    }
+
+    @RabbitListener(queues = {"${auth.manager.queue}"})
+    public void receiveDelete(@Payload RemoveManagerAuthEvent event){
+        _managerAuth.removeManagerAuth(event);
     }
 }

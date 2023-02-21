@@ -17,11 +17,13 @@ import org.springframework.context.annotation.Configuration;
 import br.ufpr.tads.msbantadsauth.Application.Services.ClientAuth.Events.CreateClientAuthEvent;
 import br.ufpr.tads.msbantadsauth.Application.Services.ClientAuth.Events.GeneratePasswordEvent;
 import br.ufpr.tads.msbantadsauth.Application.Services.ManagerAuth.Events.CreateManagerAuthEvent;
+import br.ufpr.tads.msbantadsauth.Application.Services.ManagerAuth.Events.RemoveManagerAuthEvent;
 import br.ufpr.tads.msbantadsauth.Domain.Events.ClientAuth.AuthCanceledEvent;
 import br.ufpr.tads.msbantadsauth.Domain.Events.ClientAuth.ClientPasswordCreatedEvent;
 import br.ufpr.tads.msbantadsauth.Domain.Events.ClientAuth.ClientPasswordFailEvent;
 import br.ufpr.tads.msbantadsauth.Domain.Events.ManagerAuth.ManagerAuthCreatedEvent;
 import br.ufpr.tads.msbantadsauth.Domain.Events.ManagerAuth.ManagerAuthFail;
+import br.ufpr.tads.msbantadsauth.Domain.Events.ManagerAuth.RemovedManagerAccessEvent;
 
 @Configuration
 public class RabbitConfig {
@@ -68,12 +70,14 @@ public class RabbitConfig {
         idClassMapping.put("CreateClientAuthEvent", CreateClientAuthEvent.class);
         idClassMapping.put("CreateManagerAuthEvent", CreateManagerAuthEvent.class);
         idClassMapping.put("GeneratePasswordEvent", GeneratePasswordEvent.class);
+        idClassMapping.put("RemoveManagerCredentials", RemoveManagerAuthEvent.class);
         
         idClassMapping.put("AuthCanceledEvent", AuthCanceledEvent.class);
         idClassMapping.put("ClientPasswordCreatedEvent", ClientPasswordCreatedEvent.class);
         idClassMapping.put("ClientPasswordFailEvent", ClientPasswordFailEvent.class);
         idClassMapping.put("ManagerAuthCreatedEvent", ManagerAuthCreatedEvent.class);
         idClassMapping.put("ManagerAuthFail", ManagerAuthFail.class);
+        idClassMapping.put("RemovedManagerAccessEvent", RemovedManagerAccessEvent.class);
         return idClassMapping;
     }
 
