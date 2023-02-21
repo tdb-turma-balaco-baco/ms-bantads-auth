@@ -1,6 +1,8 @@
 package br.ufpr.tads.msbantadsauth.Application.Services.Authentication;
 
+import br.ufpr.tads.msbantadsauth.Application.Services.Authentication.Result.UserLogin;
+
 public interface IUserAuthentication {
     
-    boolean login(String email, String password);
+    UserLogin login(String email, String password);
 }

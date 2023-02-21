@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.ufpr.tads.msbantadsauth.Application.Abstractions.Messaging.IMessageSender;
 import br.ufpr.tads.msbantadsauth.Application.Services.Authentication.IUserAuthentication;
+import br.ufpr.tads.msbantadsauth.Application.Services.Authentication.Result.UserLogin;
 import br.ufpr.tads.msbantadsauth.Presentation.Contracts.UserLoginRequest;
 
 @CrossOrigin
@@ -25,14 +26,14 @@ public class AuthController {
     IMessageSender _message;
 
     @PostMapping("/login")
-    public ResponseEntity<Boolean> login(@RequestBody UserLoginRequest user) {
+    public ResponseEntity<UserLogin> login(@RequestBody UserLoginRequest user) {
         try {
-            boolean loginSuccess = _userAuthentication.login(user.getEmail(), user.getPassword());
+            UserLogin userLogin = _userAuthentication.login(user.getEmail(), user.getPassword());
 
-            if (loginSuccess) 
-                return ResponseEntity.ok(loginSuccess);
+            if (userLogin != null) 
+                return ResponseEntity.ok(userLogin);
                 
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(loginSuccess);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(userLogin);
             
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
