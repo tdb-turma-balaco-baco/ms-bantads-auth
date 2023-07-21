@@ -1,0 +1,49 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="1" author="gjperes">
+        <ext:createCollection collectionName="User">
+            <ext:options>
+                {
+                    validator: {
+                        $jsonSchema: {
+                            bsonType: "object",
+                            required: ["email", "password", "createdOn", "userType"],
+                            properties: {
+                                email: {
+                                    bsonType: "string",
+                                    description: "User email"
+                                },
+                                password: {
+                                    bsonType: "string",
+                                    description: "User password"
+                                },
+                                createdOn: {
+                                    bsonType: "date",
+                                    description: "User's time of creation"
+                                },
+                                userType: {
+                                    bsonType: "string",
+                                    description: "User permissions at the system"
+                                },
+                            }
+                        }
+                    },
+                    validationAction: "warn",
+                    validationLevel: "strict"
+                }
+            </ext:options>
+        </ext:createCollection>
+
+        <ext:createIndex collectionName="User">
+            <ext:keys>{email: 1}</ext:keys>
+            <ext:options>{unique: true, name: "emailIdx"}</ext:options>
+        </ext:createIndex>
+    </changeSet>
+
+</databaseChangeLog>
