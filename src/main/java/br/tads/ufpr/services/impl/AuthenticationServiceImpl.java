@@ -20,16 +20,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public UserLoginResponse login(String email, String password) {
-        if (StringUtils.isEmpty(email)) {
-            Log.error("Email vazio");
-            throw new IllegalArgumentException("Email vazio");
-        }
-
-        if (StringUtils.isEmpty(password)) {
-            Log.error("Senha vazia");
-            throw new IllegalArgumentException("Senha vazia");
-        }
-
         String sanitazedEmail = email.toLowerCase().trim();
 
         Log.info("Credencial VALIDANDO:" + sanitazedEmail);

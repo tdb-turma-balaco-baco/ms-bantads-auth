@@ -8,6 +8,8 @@ import br.tads.ufpr.services.AuthenticationService;
 import io.quarkus.elytron.security.common.BcryptUtil;
 import io.quarkus.logging.Log;
 import jakarta.inject.Inject;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -24,15 +26,12 @@ public class AuthResource {
 
     @POST
     @Path("/login")
-    public Response login(UserLoginRequest userLoginRequest) {
+    public Response login(@Valid @NotNull UserLoginRequest userLoginRequest) {
         try {
-            if (userLoginRequest == null) {
-                throw new IllegalArgumentException("Precisa ter os campos {email, password}");
-            }
-
             UserLoginResponse response = authenticationService.login(
                     userLoginRequest.email(),
-                    userLoginRequest.password());
+                    userLoginRequest.password()
+            );
 
             return Response.ok(response).build();
         } catch (NoSuchElementException | IllegalArgumentException e) {
