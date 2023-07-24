@@ -26,12 +26,16 @@ public class AuthResource {
     @Path("/login")
     public Response login(UserLoginRequest userLoginRequest) {
         try {
+            if (userLoginRequest == null) {
+                throw new IllegalArgumentException("Precisa ter os campos {email, password}");
+            }
+
             UserLoginResponse response = authenticationService.login(
                     userLoginRequest.email(),
                     userLoginRequest.password());
 
             return Response.ok(response).build();
-        } catch (NoSuchElementException e) {
+        } catch (NoSuchElementException | IllegalArgumentException e) {
             Log.error("Credenciais inválidas");
             throw new BadRequestException("Credenciais inválidas");
         } catch (Exception e) {

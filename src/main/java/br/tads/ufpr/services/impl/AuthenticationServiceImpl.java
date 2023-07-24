@@ -8,6 +8,8 @@ import io.quarkus.elytron.security.common.BcryptUtil;
 import io.quarkus.logging.Log;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -18,6 +20,16 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public UserLoginResponse login(String email, String password) {
+        if (StringUtils.isEmpty(email)) {
+            Log.error("Email vazio");
+            throw new IllegalArgumentException("Email vazio");
+        }
+
+        if (StringUtils.isEmpty(password)) {
+            Log.error("Senha vazia");
+            throw new IllegalArgumentException("Senha vazia");
+        }
+
         String sanitazedEmail = email.toLowerCase().trim();
 
         Log.info("Credencial VALIDANDO:" + sanitazedEmail);
