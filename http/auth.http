@@ -1,20 +1,18 @@
 ### Create User
 POST http://localhost:8080/api/auth
-Authorization: Basic user 67a731aa-bb73-4ba7-b4ed-8a10a606afa8
 Content-Type: application/json
 
 {
-  "email": "email1@email.com",
+  "email": "email@email.com",
   "password": "password123456",
   "profileRole": "CUSTOMER"
 }
 
-### Basic authorization.
+### Login
 POST http://localhost:8080/api/auth/login
-Authorization: Basic user 67a731aa-bb73-4ba7-b4ed-8a10a606afa8
 Content-Type: application/json
 
 {
-  "email": "email1@email.com",
-  "password": "password123456"
+  "email": "email@email.com",
+  "password": "R1>otB=q/rX]8pwQ"
 }

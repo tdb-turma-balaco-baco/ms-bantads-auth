@@ -1,20 +1,28 @@
 package br.ufpr.tads.msbantadsauth.user;
 
+import br.ufpr.tads.msbantadsauth.inbound.CreateUser;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "users")
-public class User implements Serializable {
+public class User implements Serializable, UserDetails {
     @Serial private static final long serialVersionUID = -8708217994892763497L;
 
     @Id
@@ -29,7 +37,9 @@ public class User implements Serializable {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column private UserRoles profileRole;
+    @Column private ProfileRoles profileRole;
+
+    @Column private boolean isActive = true;
 
     @CreatedBy
     @Column private String createdBy;
@@ -44,4 +54,43 @@ public class User implements Serializable {
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDateTime updatedAt;
+
+    public User(CreateUser createUser) {
+        this.setEmail(createUser.email());
+        this.setPassword(createUser.password());
+        this.setProfileRole(createUser.profileRole());
+
+        this.setCreatedAt(LocalDateTime.now());
+        this.setUpdatedAt(LocalDateTime.now());
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return this.isActive;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return this.isActive;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return this.isActive;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return this.isActive;
+    }
 }

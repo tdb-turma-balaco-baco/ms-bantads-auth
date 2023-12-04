@@ -1,8 +1,8 @@
 package br.ufpr.tads.msbantadsauth.auth;
 
+import br.ufpr.tads.msbantadsauth.inbound.CreateUser;
 import br.ufpr.tads.msbantadsauth.inbound.LoginRequest;
 import br.ufpr.tads.msbantadsauth.outbound.LoginResponse;
-import br.ufpr.tads.msbantadsauth.user.User;
 import br.ufpr.tads.msbantadsauth.user.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,13 +22,15 @@ public class AuthController {
     private final UserService service;
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody User user) {
-        User saved = this.service.create(user);
-        return ResponseEntity.created(URI.create(ROUTE + "/" + saved.getId())).build();
+    public ResponseEntity<?> create(@RequestBody CreateUser user) {
+        log.debug("[request] create {}", user);
+        var saved = this.service.create(user);
+        return ResponseEntity.created(URI.create(ROUTE + "/" + saved.userId())).build();
     }
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody @Valid LoginRequest request) {
+        log.debug("[request] login '{}'", request.email());
         LoginResponse response = this.service.login(request);
         return ResponseEntity.ok(response);
     }
