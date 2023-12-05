@@ -1,5 +1,5 @@
 ### Create User
-POST http://localhost:8080/api/auth
+POST http://localhost:8080/api/auth/user
 Content-Type: application/json
 
 {
@@ -9,10 +9,20 @@ Content-Type: application/json
 }
 
 ### Login
-POST http://localhost:8080/api/auth/login
+POST http://localhost:8080/api/auth
 Content-Type: application/json
 
 {
-  "email": "email@email.com",
-  "password": "R1>otB=q/rX]8pwQ"
+  "email": "email2@email.com",
+  "password": "password123456"
+}
+
+### Update
+PUT http://localhost:8080/api/auth/user/8
+Content-Type: application/json
+
+{
+  "email": "email2@email.com",
+  "password": "password123456",
+  "userId": 8
 }
