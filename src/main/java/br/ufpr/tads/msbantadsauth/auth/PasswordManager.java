@@ -1,5 +1,8 @@
 package br.ufpr.tads.msbantadsauth.auth;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.passay.CharacterData;
@@ -24,17 +27,7 @@ public class PasswordManager {
         List<CharacterRule> rules = List.of(
                 new CharacterRule(EnglishCharacterData.Digit),
                 new CharacterRule(EnglishCharacterData.Alphabetical),
-                new CharacterRule(new CharacterData() {
-                    @Override
-                    public String getErrorCode() {
-                        return null;
-                    }
-
-                    @Override
-                    public String getCharacters() {
-                        return "!#$%&'()*+,-./:;<=>?@[]^_`{|}~";
-                    }
-                })
+                new CharacterRule(BantadsCharacterData.Special)
         );
 
         String rawPassword = passwordGenerator.generatePassword(passwordLength, rules);
@@ -48,5 +41,14 @@ public class PasswordManager {
 
     public boolean matches(CharSequence rawPassword, String encodedPassword) {
         return this.passwordEncoder.matches(rawPassword, encodedPassword);
+    }
+
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    enum BantadsCharacterData implements CharacterData {
+        Special("INSUFFICIENT_SPECIAL", "!#$%&'()*+,-./:;<=>?@[]^_`{|}~");
+
+        private final String errorCode;
+        private final String characters;
     }
 }

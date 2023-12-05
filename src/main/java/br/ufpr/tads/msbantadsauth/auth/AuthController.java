@@ -37,11 +37,11 @@ public class AuthController {
     public ResponseEntity<?> create(@RequestBody @Valid CreateUser user) {
         log.debug("[request] create {}", user);
         var saved = this.service.create(user);
-        return ResponseEntity.created(URI.create(ROUTE + "/" + saved.userId())).build();
+        return ResponseEntity.created(URI.create(ROUTE + "/user/" + saved.userId())).build();
     }
 
     @PutMapping("/user/{id}")
-    public ResponseEntity<UserResponse> update(@RequestParam @Positive Long id,
+    public ResponseEntity<UserResponse> update(@PathVariable @Positive Long id,
                                                @RequestBody @Valid UpdateUser user) {
         log.debug("[request] update {}", user.userId());
 
