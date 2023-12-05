@@ -1,11 +1,12 @@
 package br.ufpr.tads.msbantadsauth.user;
 
-import br.ufpr.tads.msbantadsauth.auth.PasswordManager;
 import br.ufpr.tads.msbantadsauth.inbound.CreateUser;
 import br.ufpr.tads.msbantadsauth.inbound.UpdateUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class UserServiceTest {
-    private static final CreateUser CREATE_USER = new CreateUser("customer@email.com", ProfileRoles.CUSTOMER, "");
+    private static final CreateUser CREATE_USER = new CreateUser("customer@email.com", ProfileRole.CUSTOMER, "");
 
     @Autowired private UserService service;
     @Autowired private UserRepository repository;
@@ -27,15 +28,17 @@ class UserServiceTest {
         this.repository.deleteAll();
     }
 
-    @Test
-    @DisplayName("should successfully create a user")
-    void create() {
-        var response = this.service.create(CREATE_USER);
+    @ParameterizedTest
+    @EnumSource(ProfileRole.class)
+    @DisplayName("should successfully create a user for all roles")
+    void create(ProfileRole role) {
+        CreateUser createUser = new CreateUser("customer@email.com", role, "");
+        var response = this.service.create(createUser);
 
         assertEquals(1, this.repository.count());
         assertNotNull(response.userId());
-        assertEquals(CREATE_USER.email(), response.email());
-        assertEquals(CREATE_USER.profileRole(), response.role());
+        assertEquals(createUser.email(), response.email());
+        assertEquals(createUser.profileRole(), response.role());
     }
 
     @Test

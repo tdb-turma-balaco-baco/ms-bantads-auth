@@ -37,7 +37,7 @@ public class User implements Serializable, UserDetails {
     private String password;
 
     @Enumerated(EnumType.STRING)
-    @Column private ProfileRoles profileRole;
+    @Column private ProfileRole profileRole;
 
     @Column private boolean isActive = true;
 

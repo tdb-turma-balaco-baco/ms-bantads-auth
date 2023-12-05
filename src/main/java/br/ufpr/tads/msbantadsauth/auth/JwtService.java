@@ -26,6 +26,7 @@ public class JwtService {
         ZonedDateTime now = ZonedDateTime.now(ZoneId.of("America/Sao_Paulo"));
 
         return Jwts.builder()
+                .setIssuer(userDetails.getUsername())
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(Date.from(now.toInstant()))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)

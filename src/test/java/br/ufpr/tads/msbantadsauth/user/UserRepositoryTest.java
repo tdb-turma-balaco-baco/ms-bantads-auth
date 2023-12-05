@@ -23,7 +23,7 @@ class UserRepositoryTest {
         User entity = new User();
         entity.setEmail("email@email.com");
         entity.setPassword("password");
-        entity.setProfileRole(ProfileRoles.CUSTOMER);
+        entity.setProfileRole(ProfileRole.CUSTOMER);
 
         User saved = this.repository.save(entity);
         assertNotNull(saved);
