@@ -1,12 +1,10 @@
 # ms-bantads-auth
 
-This project is part of a college assignment, with the objective of implementing
+The Bantads project is part of a college assignment, with the objective of implementing
 a microservices based architecture, with various technologies, such as
 Java, Spring Boot, Nodejs, Docker, PostgreSQL, etc.
 
-## Auth Microservice
-
-This repository contains de authentication microservice.
+This repository contains the authentication microservice.
 
 ## Requirements and Usage
 
