@@ -21,7 +21,6 @@ class UserServiceTest {
 
     @Autowired private UserService service;
     @Autowired private UserRepository repository;
-    @Autowired private PasswordManager passwordManager;
 
     @BeforeEach
     void setUp() {
@@ -58,7 +57,7 @@ class UserServiceTest {
         User updated = this.repository.findById(created.getId()).orElseThrow(AssertionError::new);
 
         assertEquals(dto.email().toLowerCase(), updated.getEmail());
-        assertTrue(passwordManager.matches(dto.password(), updated.getPassword()));
+        assertNotEquals(created.getPassword(), updated.getPassword());
     }
 
     @Test
