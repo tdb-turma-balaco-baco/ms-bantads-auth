@@ -29,10 +29,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 class AuthControllerIntegrationTest {
+    private static final String URL = AuthController.ROUTE;
     private static final String VALID_PASSWORD = "passwordLong";
     private static final String EMAIL = "email@email.com";
-    private static final User CREATE_USER = new User(new CreateUser(EMAIL, ProfileRole.CUSTOMER, "updateMe"));
-    private final String URL = AuthController.ROUTE;
+    private static final User CREATE_USER = User.create(new CreateUser(EMAIL, ProfileRole.CUSTOMER, "updateMe"));
 
     @Autowired private MockMvc mockMvc;
     @Autowired private ObjectMapper objectMapper;
@@ -53,7 +53,7 @@ class AuthControllerIntegrationTest {
         var json = objectMapper.writeValueAsString(request);
 
         this.mockMvc
-                .perform(post(this.URL)
+                .perform(post(URL)
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -69,7 +69,7 @@ class AuthControllerIntegrationTest {
         var json = objectMapper.writeValueAsString(request);
 
         this.mockMvc
-                .perform(post(this.URL)
+                .perform(post(URL)
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -87,7 +87,7 @@ class AuthControllerIntegrationTest {
         var json = objectMapper.writeValueAsString(request);
 
         this.mockMvc
-                .perform(post(this.URL)
+                .perform(post(URL)
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -105,7 +105,7 @@ class AuthControllerIntegrationTest {
         var json = objectMapper.writeValueAsString(request);
 
         var result = this.mockMvc
-                .perform(post(this.URL)
+                .perform(post(URL)
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -125,7 +125,7 @@ class AuthControllerIntegrationTest {
         var json = objectMapper.writeValueAsString(request);
 
         this.mockMvc
-                .perform(post(this.URL + "/user")
+                .perform(post(URL + "/user")
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -143,7 +143,7 @@ class AuthControllerIntegrationTest {
         var json = objectMapper.writeValueAsString(request);
 
         this.mockMvc
-                .perform(post(this.URL + "/user")
+                .perform(post(URL + "/user")
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -155,13 +155,13 @@ class AuthControllerIntegrationTest {
 
     @ParameterizedTest
     @EnumSource(ProfileRole.class)
-    @DisplayName("should return 201 when a user is created")
+    @DisplayName("should create a new user successfully")
     void return201_create(ProfileRole profileRole) throws Exception {
         var request = new CreateUser(EMAIL, profileRole, null);
         var json = objectMapper.writeValueAsString(request);
 
         var result = this.mockMvc
-                .perform(post(this.URL + "/user")
+                .perform(post(URL + "/user")
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -187,7 +187,7 @@ class AuthControllerIntegrationTest {
         var json = objectMapper.writeValueAsString(request);
 
         this.mockMvc
-                .perform(put(this.URL + "/user/" + userId)
+                .perform(put(URL + "/user/" + userId)
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -210,7 +210,7 @@ class AuthControllerIntegrationTest {
         var json = objectMapper.writeValueAsString(request);
 
         this.mockMvc
-                .perform(put(this.URL + "/user/" + userId)
+                .perform(put(URL + "/user/" + userId)
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -231,7 +231,7 @@ class AuthControllerIntegrationTest {
         var json = objectMapper.writeValueAsString(request);
 
         this.mockMvc
-                .perform(put(this.URL + "/user/" + userId)
+                .perform(put(URL + "/user/" + userId)
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -252,7 +252,7 @@ class AuthControllerIntegrationTest {
         var json = objectMapper.writeValueAsString(request);
 
         this.mockMvc
-                .perform(put(this.URL + "/user/" + (userId + 1L))
+                .perform(put(URL + "/user/" + (userId + 1L))
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -273,7 +273,7 @@ class AuthControllerIntegrationTest {
         var json = objectMapper.writeValueAsString(request);
 
         this.mockMvc
-                .perform(put(this.URL + "/user/" + userId)
+                .perform(put(URL + "/user/" + userId)
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON)
                 )
@@ -294,7 +294,7 @@ class AuthControllerIntegrationTest {
         var json = objectMapper.writeValueAsString(request);
 
         this.mockMvc
-                .perform(put(this.URL + "/user/" + userId)
+                .perform(put(URL + "/user/" + userId)
                         .content(json)
                         .contentType(MediaType.APPLICATION_JSON)
                 )

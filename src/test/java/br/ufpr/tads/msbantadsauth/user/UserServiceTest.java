@@ -44,7 +44,7 @@ class UserServiceTest {
     @Test
     @DisplayName("should throw conflict when creating with same email")
     void create_withExistingUser() {
-        this.repository.save(new User(CREATE_USER));
+        this.repository.save(User.create(CREATE_USER));
 
         assertThrows(ResponseStatusException.class, () -> this.service.create(CREATE_USER));
         assertEquals(1, this.repository.count());
@@ -53,7 +53,7 @@ class UserServiceTest {
     @Test
     @DisplayName("should update all user values successfully")
     void update() {
-        var created = this.repository.save(new User(CREATE_USER));
+        var created = this.repository.save(User.create(CREATE_USER));
         UpdateUser dto = new UpdateUser(created.getId(), "newEmail@email.com", "newPassword");
 
         this.service.update(dto);
@@ -66,7 +66,7 @@ class UserServiceTest {
     @Test
     @DisplayName("should update some of the user values")
     void updatePartial() {
-        var created = this.repository.save(new User(CREATE_USER));
+        var created = this.repository.save(User.create((CREATE_USER)));
         List<Long> ids = this.repository.findAll().stream().map(User::getId).toList();
 
         UpdateUser request = new UpdateUser(ids.get(0), "newEmail@email.com", null);

@@ -9,6 +9,7 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.lang.NonNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -55,13 +56,16 @@ public class User implements Serializable, UserDetails {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    public User(CreateUser createUser) {
-        this.setEmail(createUser.email());
-        this.setPassword(createUser.password());
-        this.setProfileRole(createUser.profileRole());
+    public static User create(@NonNull CreateUser createUser) {
+        var user = new User();
+        user.setEmail(createUser.email());
+        user.setPassword(createUser.password());
+        user.setProfileRole(createUser.profileRole());
 
-        this.setCreatedAt(LocalDateTime.now());
-        this.setUpdatedAt(LocalDateTime.now());
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
+
+        return user;
     }
 
     @Override

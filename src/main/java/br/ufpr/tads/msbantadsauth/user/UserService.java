@@ -32,24 +32,24 @@ public class UserService {
     }
 
     public List<UserResponse> findUsersById(@NonNull List<Long> ids) {
-        return this.repository.findAllById(ids).stream().map(UserResponse::ofEntity).toList();
+        return this.repository.findAllById(ids).stream().map(UserResponse::of).toList();
     }
 
     @Transactional
-    public UserResponse create(@Valid @NonNull CreateUser dto) {
-        log.debug("[creating] {}: '{}'", dto.profileRole(), dto.email());
-        Optional<User> optional = this.repository.findUserByEmail(dto.email());
+    public UserResponse create(@Valid @NonNull CreateUser createUser) {
+        log.debug("[creating] {}: '{}'", createUser.profileRole(), createUser.email());
+        Optional<User> optional = this.repository.findUserByEmail(createUser.email());
 
         if (optional.isPresent()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "user already exists");
         }
 
-        var entity = new User(dto);
+        var entity = User.create(createUser);
 
-        log.info("[creating] saving {} to database: '{}'", dto.profileRole(), dto.email());
+        log.info("[creating] saving {} to database: '{}'", createUser.profileRole(), createUser.email());
         var saved = this.repository.save(entity);
 
-        return UserResponse.ofEntity(saved);
+        return UserResponse.of(saved);
     }
 
     @Transactional
@@ -71,6 +71,6 @@ public class UserService {
         }
 
         log.info("[updating] saving '{}' to database", user.getId());
-        return UserResponse.ofEntity(this.repository.save(user));
+        return UserResponse.of(this.repository.save(user));
     }
 }
